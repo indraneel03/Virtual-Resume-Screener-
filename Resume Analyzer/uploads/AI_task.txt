@@ -1,0 +1,50 @@
+**AI Email Response Agent**
+The AI Email Response Agent continuously monitors the inbox, understands incoming messages, categorizes them, and drafts accurate replies. It helps organizations respond instantly to common customer support emails, reducing manual effort and improving response time.
+
+**Virtual Resume Screener**
+The Virtual Resume Screener automatically parses resumes and matches candidate profiles with job descriptions. It enables recruiters to screen thousands of resumes within minutes, ensuring faster and more efficient hiring.
+
+**Virtual Lead Qualifier**
+The Virtual Lead Qualifier evaluates incoming inquiries by screening buyers, validating their budget, and assessing their intent. This helps businesses focus only on genuine, high-intent prospects instead of spending time on unqualified leads.
+
+**Virtual Inventory Assistant**
+The Virtual Inventory Assistant tracks stock levels in real time, sends alerts when inventory is low, and can even trigger reorder actions. This ensures businesses never run out of essential stock and maintain smooth operations.
+
+OUTPUT FORMAT (fill with actual data):
+{{
+  "candidate_{{candidate_id}}_{{name_without_spaces}}.json": {{
+    "inputs": {{
+      "candidate_id": "CAND_20260130_001",
+      "name": "<<extract from parsed_resume>>",
+      "email": "<<extract from parsed_resume>>",
+      "phone": "<<extract from parsed_resume>>",
+      "current_position": "<<extract from parsed_resume>>",
+      "education": "<<highest degree from parsed_resume>>",
+      "education_details": <<education array from parsed_resume>>,
+      "total_experience_years": <<calculate from work_experience>>,
+      "skills": <<skills array from parsed_resume>>,
+      "work_experience": <<work experience array from parsed_resume>>,
+      "projects": <<projects array from parsed_resume>>,
+      "certifications": <<certifications from parsed_resume>>,
+      "languages": <<languages from parsed_resume>>,
+      "matching_score": <<overall score from matching_analysis>>,
+      "skill_match_score": <<skill score from matching_analysis>>,
+      "experience_match_score": <<experience score from matching_analysis>>,
+      "education_match_score": <<education score from matching_analysis>>,
+      "matched_skills": <<matched_skills array from matching_analysis>>,
+      "missing_skills": <<missing_skills array from matching_analysis>>,
+      "additional_skills": <<additional_skills array from matching_analysis>>,
+      "strengths": <<strengths array from matching_analysis>>,
+      "weaknesses": <<weaknesses array from matching_analysis>>,
+      "recommendation": "<<STRONG_MATCH or GOOD_MATCH or MODERATE_MATCH or WEAK_MATCH or NO_MATCH>>",
+      "recommendation_explanation": "<<explanation from matching_analysis>>",
+      "priority_level": "<<HIGH or MEDIUM or LOW>>",
+      "status": "<<PASSED or REVIEW or REJECTED>>",
+      "next_steps": "<<next_steps from matching_analysis>>",
+      "interview_questions": <<interview_questions array from matching_analysis>>,
+      "recruiter_notes": "<<brief summary of key points>>",
+      "timestamp": "<<current ISO timestamp>>",
+      "processed_by": "Virtual Resume Screener v1.0"
+    }}
+  }}
+}}

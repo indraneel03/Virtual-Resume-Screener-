@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeAI Pro | Enterprise Resume Intelligence Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-background">
+        <div class="resume-particles" id="particleContainer"></div>
+        <div class="grid-overlay"></div>
+        <div class="gradient-mesh"></div>
+        <div class="floating-documents">
+            <div class="floating-doc doc-1"><i class="fas fa-file-alt"></i></div>
+            <div class="floating-doc doc-2"><i class="fas fa-file-pdf"></i></div>
+            <div class="floating-doc doc-3"><i class="fas fa-file-word"></i></div>
+            <div class="floating-doc doc-4"><i class="fas fa-user-tie"></i></div>
+            <div class="floating-doc doc-5"><i class="fas fa-briefcase"></i></div>
+            <div class="floating-doc doc-6"><i class="fas fa-graduation-cap"></i></div>
+            <div class="floating-doc doc-7"><i class="fas fa-code"></i></div>
+            <div class="floating-doc doc-8"><i class="fas fa-chart-line"></i></div>
+        </div>
+        <div class="aurora-glow"></div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="ai-loader">
+                <div class="ai-brain">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="neural-network">
+                    <span></span><span></span><span></span>
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+            <h2 class="loading-title">AI Processing Resumes</h2>
+            <p class="loading-subtitle" id="loadingStatus">Analyzing candidate profiles...</p>
+            <div class="loading-progress">
+                <div class="progress-track">
+                    <div class="progress-fill" id="loadingProgress"></div>
+                </div>
+                <span class="progress-text" id="progressText">0%</span>
+            </div>
+            <div class="processing-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="processedCount">0</span>
+                    <span class="stat-label">Processed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="remainingCount">0</span>
+                    <span class="stat-label">Remaining</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="matchesFound">0</span>
+                    <span class="stat-label">Matches</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div class="app-wrapper">
+        <!-- Navigation -->
+        <nav class="main-nav glass-nav">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <div class="icon-glow"></div>
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>ResumeAI<span class="pro-badge">PRO</span></h1>
+                    <span class="brand-tagline">Enterprise Intelligence</span>
+                </div>
+            </div>
+            <div class="nav-center">
+                <div class="nav-tabs">
+                    <button class="nav-tab active" data-section="dashboard">
+                        <i class="fas fa-th-large"></i>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="nav-tab" data-section="analytics">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Analytics</span>
+                    </button>
+                    <button class="nav-tab" data-section="candidates">
+                        <i class="fas fa-users"></i>
+                        <span>Candidates</span>
+                    </button>
+                    <button class="nav-tab" data-section="reports">
+                        <i class="fas fa-file-export"></i>
+                        <span>Reports</span>
+                    </button>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search candidates..." id="globalSearch">
+                </div>
+                <button class="nav-btn" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <button class="nav-btn" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="user-profile" id="userProfile">
+                    <div class="user-avatar" id="userAvatar">
+                        <img src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff" alt="User" id="avatarImg">
+                    </div>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-header">
+                            <img src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff" alt="User" id="dropdownAvatarImg">
+                            <div class="user-info">
+                                <span class="user-name" id="userName">User</span>
+                                <span class="user-email" id="userEmail">user@email.com</span>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item"><i class="fas fa-user"></i> My Profile</a>
+                        <a href="#" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="#" class="dropdown-item"><i class="fas fa-history"></i> Analysis History</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/logout" class="dropdown-item text-danger" id="signOutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero-section" id="heroSection">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-sparkles"></i>
+                    <span>AI-Powered Resume Analysis</span>
+                </div>
+                <h1 class="hero-title">
+                    Screen <span class="gradient-text">1000+ Resumes</span><br>
+                    in Minutes, Not Days
+                </h1>
+                <p class="hero-subtitle">
+                    Enterprise-grade AI that analyzes skills, experience, and cultural fit.
+                    Trusted by Fortune 500 companies worldwide.
+                </p>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <span class="stat-value">98%</span>
+                        <span class="stat-desc">Accuracy Rate</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="stat-value">10x</span>
+                        <span class="stat-desc">Faster Screening</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="visual-card">
+                    <div class="card-header">
+                        <span class="card-indicator green"></span>
+                        <span>Live Analysis</span>
+                    </div>
+                    <div class="candidate-preview">
+                        <div class="preview-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="preview-info">
+                            <h4>Analyzing Candidate</h4>
+                            <p>Extracting skills & experience</p>
+                        </div>
+                        <div class="match-score">
+                            <svg viewBox="0 0 36 36">
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#1e293b" stroke-width="3"/>
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="url(#gradient)" stroke-width="3" stroke-dasharray="92, 100" class="score-circle"/>
+                            </svg>
+                            <span class="score-value">92%</span>
+                        </div>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag matched">Python</span>
+                        <span class="skill-tag matched">Machine Learning</span>
+                        <span class="skill-tag matched">AWS</span>
+                        <span class="skill-tag partial">Docker</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Dashboard -->
+        <main class="main-dashboard">
+            <!-- Upload Section -->
+            <section class="upload-section" id="uploadSection">
+                <div class="section-header">
+                    <div class="header-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="header-text">
+                        <h2>Bulk Resume Upload</h2>
+                        <p>Upload up to 1000 resumes for instant AI analysis</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="action-btn secondary" id="templateBtn">
+                            <i class="fas fa-download"></i>
+                            <span>Download Template</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="upload-grid">
+                    <!-- Upload Area -->
+                    <div class="upload-card glass-card">
+                        <div class="upload-zone" id="uploadZone">
+                            <input type="file" id="resumeFiles" name="resumes" multiple accept=".pdf,.doc,.docx,.txt,.zip" hidden>
+                            <div class="upload-animation">
+                                <div class="upload-ring"></div>
+                                <div class="upload-ring"></div>
+                                <div class="upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                            </div>
+                            <h3>Drop Resumes Here</h3>
+                            <p>or click to browse files</p>
+                            <div class="upload-formats">
+                                <span><i class="fas fa-file-pdf"></i> PDF</span>
+                                <span><i class="fas fa-file-word"></i> DOCX</span>
+                                <span><i class="fas fa-file-alt"></i> TXT</span>
+                                <span><i class="fas fa-file-archive"></i> ZIP</span>
+                            </div>
+                            <div class="upload-limit">
+                                <i class="fas fa-info-circle"></i>
+                                Max 1000 files • 50MB per file • 500MB total
+                            </div>
+                        </div>
+                        <div class="upload-progress-section" id="uploadProgressSection">
+                            <div class="progress-header">
+                                <span class="progress-title">Uploading Files...</span>
+                                <span class="progress-count" id="uploadCount">0/0</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="uploadProgressBar"></div>
+                                </div>
+                            </div>
+                            <div class="upload-file-list" id="uploadFileList"></div>
+                        </div>
+                    </div>
+
+                    <!-- Job Description -->
+                    <div class="job-card glass-card">
+                        <div class="job-header">
+                            <i class="fas fa-briefcase"></i>
+                            <h3>Job Requirements</h3>
+                        </div>
+                        <div class="job-input-toggle">
+                            <button class="toggle-input-btn active" data-input="text"><i class="fas fa-keyboard"></i> Text</button>
+                            <button class="toggle-input-btn" data-input="file"><i class="fas fa-file-upload"></i> Upload File</button>
+                        </div>
+                        <div class="job-templates">
+                            <span class="template-chip" data-template="software">Software Engineer</span>
+                            <span class="template-chip" data-template="data">Data Scientist</span>
+                            <span class="template-chip" data-template="product">Product Manager</span>
+                            <span class="template-chip" data-template="design">UX Designer</span>
+                        </div>
+                        <div class="job-file-upload" id="jobFileUpload" style="display: none;">
+                            <input type="file" id="jobDescFile" accept=".pdf,.doc,.docx,.txt" hidden>
+                            <div class="job-file-zone" id="jobFileZone">
+                                <i class="fas fa-file-alt"></i>
+                                <p>Drop job description file or click to upload</p>
+                                <span>PDF, DOCX, TXT supported</span>
+                            </div>
+                            <div class="job-file-selected" id="jobFileSelected"></div>
+                        </div>
+                        <div class="job-input" id="jobTextInput">
+                            <textarea id="jobDescription" placeholder="Paste your job description here or select a template above...
+
+Include:
+• Required skills and technologies
+• Years of experience needed
+• Education requirements
+• Key responsibilities
+• Nice-to-have qualifications"></textarea>
+                            <div class="input-actions">
+                                <button class="input-btn" id="parseJobBtn" title="AI Parse">
+                                    <i class="fas fa-magic"></i>
+                                </button>
+                                <button class="input-btn" id="clearJobBtn" title="Clear">
+                                    <i class="fas fa-eraser"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="extracted-requirements" id="extractedRequirements">
+                            <h4><i class="fas fa-check-double"></i> Extracted Requirements</h4>
+                            <div class="requirements-grid" id="requirementsGrid"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selected Files Grid -->
+                <div class="selected-files-section" id="selectedFilesSection">
+                    <div class="files-header">
+                        <h3><i class="fas fa-folder-open"></i> Selected Files (<span id="fileCount">0</span>)</h3>
+                        <div class="files-actions">
+                            <button class="btn-sm" id="selectAllFiles">Select All</button>
+                            <button class="btn-sm danger" id="removeSelectedFiles">Remove Selected</button>
+                            <button class="btn-sm" id="clearAllFiles">Clear All</button>
+                        </div>
+                    </div>
+                    <div class="files-grid" id="filesGrid"></div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-section">
+                    <div class="action-info">
+                        <div class="info-item">
+                            <i class="fas fa-file-alt"></i>
+                            <span><strong id="totalFilesCount">0</strong> resumes ready</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-clock"></i>
+                            <span>Est. time: <strong id="estimatedTime">0 min</strong></span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary btn-lg" id="demoBtn">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Run Demo</span>
+                        </button>
+                        <button class="btn btn-primary btn-lg" id="analyzeBtn" disabled>
+                            <i class="fas fa-rocket"></i>
+                            <span>Start AI Analysis</span>
+                            <div class="btn-shine"></div>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Dashboard -->
+            <section class="results-dashboard" id="resultsDashboard">
+                <!-- Stats Overview -->
+                <div class="stats-overview">
+                    <div class="stat-card glass-card primary">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number" id="totalCandidates">0</span>
+                            <span class="stat-label">Total Candidates</span>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>100%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card success">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number" id="strongMatches">0</span>
+                            <span class="stat-label">Strong Matches</span>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="strongPercent">0%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card warning">
+                        <div class="stat-icon">
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number" id="goodMatches">0</span>
+                            <span class="stat-label">Good Matches</span>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="goodPercent">0%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card info">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number" id="avgScore">0%</span>
+                            <span class="stat-label">Avg. Match Score</span>
+                        </div>
+                        <div class="stat-trend neutral">
+                            <i class="fas fa-minus"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-card glass-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-pie"></i> Score Distribution</h3>
+                            <div class="chart-actions">
+                                <button class="chart-btn active" data-chart="pie">Pie</button>
+                                <button class="chart-btn" data-chart="bar">Bar</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="scoreChart"></canvas>
+                        </div>
+                        <div class="chart-legend" id="scoreLegend"></div>
+                    </div>
+                    <div class="chart-card glass-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-layer-group"></i> Skills Analysis</h3>
+                        </div>
+                        <div class="skills-breakdown" id="skillsBreakdown"></div>
+                    </div>
+                    <div class="chart-card glass-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-graduation-cap"></i> Experience Distribution</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="experienceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Candidates Section -->
+                <div class="candidates-section">
+                    <div class="candidates-header">
+                        <div class="header-left">
+                            <h3><i class="fas fa-user-check"></i> Candidate Rankings</h3>
+                            <div class="filter-pills">
+                                <button class="filter-pill active" data-filter="all">All</button>
+                                <button class="filter-pill" data-filter="strong">Strong Match</button>
+                                <button class="filter-pill" data-filter="good">Good Match</button>
+                                <button class="filter-pill" data-filter="review">Needs Review</button>
+                                <button class="filter-pill" data-filter="rejected">Not Recommended</button>
+                            </div>
+                        </div>
+                        <div class="header-right">
+                            <div class="view-toggles">
+                                <button class="view-btn active" data-view="cards" title="Card View">
+                                    <i class="fas fa-th-large"></i>
+                                </button>
+                                <button class="view-btn" data-view="list" title="List View">
+                                    <i class="fas fa-list"></i>
+                                </button>
+                                <button class="view-btn" data-view="table" title="Table View">
+                                    <i class="fas fa-table"></i>
+                                </button>
+                            </div>
+                            <div class="sort-dropdown">
+                                <button class="sort-btn">
+                                    <i class="fas fa-sort"></i>
+                                    <span>Sort by Score</span>
+                                </button>
+                                <div class="sort-menu">
+                                    <button data-sort="score-desc">Score: High to Low</button>
+                                    <button data-sort="score-asc">Score: Low to High</button>
+                                    <button data-sort="name-asc">Name: A-Z</button>
+                                    <button data-sort="name-desc">Name: Z-A</button>
+                                    <button data-sort="experience-desc">Experience: High to Low</button>
+                                </div>
+                            </div>
+                            <button class="export-btn" id="exportBtn">
+                                <i class="fas fa-download"></i>
+                                <span>Export</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Candidates Grid -->
+                    <div class="candidates-container">
+                        <div class="candidates-grid" id="candidatesGrid"></div>
+                        <div class="candidates-list" id="candidatesList"></div>
+                        <div class="candidates-table-wrapper" id="candidatesTableWrapper">
+                            <table class="candidates-table">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAllCandidates"></th>
+                                        <th>Rank</th>
+                                        <th>Candidate</th>
+                                        <th>Experience</th>
+                                        <th>Skills Match</th>
+                                        <th>Overall Score</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="candidatesTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination-section">
+                        <div class="pagination-info">
+                            Showing <span id="showingFrom">1</span>-<span id="showingTo">20</span> of <span id="totalShowing">0</span> candidates
+                        </div>
+                        <div class="pagination-controls">
+                            <button class="page-btn" id="prevPage" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <div class="page-numbers" id="pageNumbers"></div>
+                            <button class="page-btn" id="nextPage">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="per-page-select">
+                            <span>Per page:</span>
+                            <select id="perPage">
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="200">200</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JSON View -->
+                <div class="json-section glass-card" id="jsonSection">
+                    <div class="json-header">
+                        <h3><i class="fas fa-code"></i> Raw JSON Output</h3>
+                        <div class="json-actions">
+                            <button class="json-btn" id="copyJson">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <button class="json-btn" id="downloadJson">
+                                <i class="fas fa-download"></i> Download JSON
+                            </button>
+                            <button class="json-btn" id="downloadCsv">
+                                <i class="fas fa-file-csv"></i> Download CSV
+                            </button>
+                        </div>
+                    </div>
+                    <pre class="json-content" id="jsonContent"></pre>
+                </div>
+            </section>
+
+            <!-- Analytics Page -->
+            <section class="page-section" id="analyticsPage" style="display: none;">
+                <div class="page-header">
+                    <h2><i class="fas fa-chart-pie"></i> Analytics Dashboard</h2>
+                    <p>Comprehensive insights and metrics from your recruitment data</p>
+                </div>
+                
+                <div class="analytics-grid">
+                    <!-- Key Metrics -->
+                    <div class="analytics-card glass-card full-width">
+                        <h3><i class="fas fa-tachometer-alt"></i> Key Performance Metrics</h3>
+                        <div class="metrics-row">
+                            <div class="metric-box">
+                                <div class="metric-icon blue"><i class="fas fa-users"></i></div>
+                                <div class="metric-data">
+                                    <span class="metric-value" id="analyticsTotalCandidates">0</span>
+                                    <span class="metric-label">Total Candidates</span>
+                                </div>
+                            </div>
+                            <div class="metric-box">
+                                <div class="metric-icon green"><i class="fas fa-check-circle"></i></div>
+                                <div class="metric-data">
+                                    <span class="metric-value" id="analyticsQualified">0</span>
+                                    <span class="metric-label">Qualified</span>
+                                </div>
+                            </div>
+                            <div class="metric-box">
+                                <div class="metric-icon orange"><i class="fas fa-clock"></i></div>
+                                <div class="metric-data">
+                                    <span class="metric-value" id="analyticsAvgTime">0s</span>
+                                    <span class="metric-label">Avg. Processing Time</span>
+                                </div>
+                            </div>
+                            <div class="metric-box">
+                                <div class="metric-icon purple"><i class="fas fa-percentage"></i></div>
+                                <div class="metric-data">
+                                    <span class="metric-value" id="analyticsMatchRate">0%</span>
+                                    <span class="metric-label">Match Rate</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Score Distribution Chart -->
+                    <div class="analytics-card glass-card">
+                        <h3><i class="fas fa-chart-bar"></i> Score Distribution</h3>
+                        <div class="chart-container-lg">
+                            <canvas id="analyticsScoreChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Skills Demand -->
+                    <div class="analytics-card glass-card">
+                        <h3><i class="fas fa-code"></i> Most In-Demand Skills</h3>
+                        <div class="skills-demand-list" id="skillsDemandList">
+                            <div class="skill-demand-item">
+                                <span class="skill-name">Python</span>
+                                <div class="skill-bar"><div class="skill-fill" style="width: 85%"></div></div>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="skill-demand-item">
+                                <span class="skill-name">JavaScript</span>
+                                <div class="skill-bar"><div class="skill-fill" style="width: 78%"></div></div>
+                                <span class="skill-percent">78%</span>
+                            </div>
+                            <div class="skill-demand-item">
+                                <span class="skill-name">React</span>
+                                <div class="skill-bar"><div class="skill-fill" style="width: 72%"></div></div>
+                                <span class="skill-percent">72%</span>
+                            </div>
+                            <div class="skill-demand-item">
+                                <span class="skill-name">AWS</span>
+                                <div class="skill-bar"><div class="skill-fill" style="width: 65%"></div></div>
+                                <span class="skill-percent">65%</span>
+                            </div>
+                            <div class="skill-demand-item">
+                                <span class="skill-name">SQL</span>
+                                <div class="skill-bar"><div class="skill-fill" style="width: 60%"></div></div>
+                                <span class="skill-percent">60%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Experience Breakdown -->
+                    <div class="analytics-card glass-card">
+                        <h3><i class="fas fa-briefcase"></i> Experience Levels</h3>
+                        <div class="chart-container-lg">
+                            <canvas id="analyticsExpChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Hiring Funnel -->
+                    <div class="analytics-card glass-card">
+                        <h3><i class="fas fa-filter"></i> Hiring Funnel</h3>
+                        <div class="hiring-funnel">
+                            <div class="funnel-stage">
+                                <div class="funnel-bar" style="width: 100%; background: var(--primary-500);">
+                                    <span>Applied</span>
+                                    <strong id="funnelApplied">0</strong>
+                                </div>
+                            </div>
+                            <div class="funnel-stage">
+                                <div class="funnel-bar" style="width: 70%; background: var(--info-500);">
+                                    <span>Screened</span>
+                                    <strong id="funnelScreened">0</strong>
+                                </div>
+                            </div>
+                            <div class="funnel-stage">
+                                <div class="funnel-bar" style="width: 40%; background: var(--warning-500);">
+                                    <span>Shortlisted</span>
+                                    <strong id="funnelShortlisted">0</strong>
+                                </div>
+                            </div>
+                            <div class="funnel-stage">
+                                <div class="funnel-bar" style="width: 20%; background: var(--success-500);">
+                                    <span>Hired</span>
+                                    <strong id="funnelHired">0</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="analytics-card glass-card">
+                        <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                        <div class="activity-list" id="activityList">
+                            <div class="activity-item">
+                                <div class="activity-icon green"><i class="fas fa-check"></i></div>
+                                <div class="activity-content">
+                                    <p>100 resumes analyzed successfully</p>
+                                    <span>2 minutes ago</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon blue"><i class="fas fa-upload"></i></div>
+                                <div class="activity-content">
+                                    <p>New batch uploaded</p>
+                                    <span>5 minutes ago</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon orange"><i class="fas fa-file-export"></i></div>
+                                <div class="activity-content">
+                                    <p>Report exported to CSV</p>
+                                    <span>10 minutes ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Candidates Page -->
+            <section class="page-section" id="candidatesPage" style="display: none;">
+                <div class="page-header">
+                    <h2><i class="fas fa-users"></i> Candidate Management</h2>
+                    <p>View, filter, and manage all analyzed candidates</p>
+                </div>
+
+                <div class="candidates-toolbar">
+                    <div class="toolbar-left">
+                        <div class="search-input-lg">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search by name, skills, company..." id="candidateSearch">
+                        </div>
+                        <div class="filter-dropdowns">
+                            <select id="statusFilter" class="filter-select">
+                                <option value="">All Status</option>
+                                <option value="strong">Strong Match</option>
+                                <option value="good">Good Match</option>
+                                <option value="review">Needs Review</option>
+                                <option value="rejected">Not Recommended</option>
+                            </select>
+                            <select id="expFilter" class="filter-select">
+                                <option value="">All Experience</option>
+                                <option value="0-2">0-2 years</option>
+                                <option value="3-5">3-5 years</option>
+                                <option value="6-10">6-10 years</option>
+                                <option value="10+">10+ years</option>
+                            </select>
+                            <select id="scoreFilter" class="filter-select">
+                                <option value="">All Scores</option>
+                                <option value="90-100">90-100%</option>
+                                <option value="80-89">80-89%</option>
+                                <option value="70-79">70-79%</option>
+                                <option value="below-70">Below 70%</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="toolbar-right">
+                        <button class="btn btn-outline" id="bulkSelectBtn">
+                            <i class="fas fa-check-square"></i> Select All
+                        </button>
+                        <button class="btn btn-outline" id="bulkExportBtn">
+                            <i class="fas fa-download"></i> Export Selected
+                        </button>
+                        <button class="btn btn-primary" id="bulkActionBtn">
+                            <i class="fas fa-tasks"></i> Bulk Actions
+                        </button>
+                    </div>
+                </div>
+
+                <div class="candidates-table-wrapper glass-card">
+                    <table class="candidates-full-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAllCandidates"></th>
+                                <th>Candidate</th>
+                                <th>Position</th>
+                                <th>Experience</th>
+                                <th>Skills</th>
+                                <th>Score</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="candidatesFullTableBody">
+                            <tr class="empty-row">
+                                <td colspan="8">
+                                    <div class="empty-state">
+                                        <i class="fas fa-users"></i>
+                                        <p>No candidates analyzed yet</p>
+                                        <span>Run an analysis to see candidates here</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="candidates-pagination">
+                    <div class="pagination-info">
+                        Showing <span id="candidatesShowingFrom">0</span>-<span id="candidatesShowingTo">0</span> of <span id="candidatesTotal">0</span>
+                    </div>
+                    <div class="pagination-controls">
+                        <button class="page-btn" id="candidatesPrevPage"><i class="fas fa-chevron-left"></i></button>
+                        <div class="page-numbers" id="candidatesPageNumbers"></div>
+                        <button class="page-btn" id="candidatesNextPage"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports Page -->
+            <section class="page-section" id="reportsPage" style="display: none;">
+                <div class="page-header">
+                    <h2><i class="fas fa-file-export"></i> Reports & Exports</h2>
+                    <p>Generate and download comprehensive recruitment reports</p>
+                </div>
+
+                <div class="reports-grid">
+                    <!-- Quick Reports -->
+                    <div class="reports-card glass-card">
+                        <h3><i class="fas fa-bolt"></i> Quick Reports</h3>
+                        <div class="quick-reports">
+                            <button class="report-btn" data-report="summary">
+                                <i class="fas fa-file-alt"></i>
+                                <span>Executive Summary</span>
+                                <small>Overview of all candidates</small>
+                            </button>
+                            <button class="report-btn" data-report="top10">
+                                <i class="fas fa-trophy"></i>
+                                <span>Top 10 Candidates</span>
+                                <small>Best matches for the role</small>
+                            </button>
+                            <button class="report-btn" data-report="skills">
+                                <i class="fas fa-code"></i>
+                                <span>Skills Analysis</span>
+                                <small>Skill distribution report</small>
+                            </button>
+                            <button class="report-btn" data-report="comparison">
+                                <i class="fas fa-balance-scale"></i>
+                                <span>Candidate Comparison</span>
+                                <small>Side-by-side comparison</small>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Custom Report Builder -->
+                    <div class="reports-card glass-card">
+                        <h3><i class="fas fa-tools"></i> Custom Report Builder</h3>
+                        <div class="report-builder">
+                            <div class="builder-section">
+                                <label>Report Name</label>
+                                <input type="text" placeholder="Enter report name" id="customReportName">
+                            </div>
+                            <div class="builder-section">
+                                <label>Include Sections</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" checked> Candidate Summary</label>
+                                    <label><input type="checkbox" checked> Score Breakdown</label>
+                                    <label><input type="checkbox" checked> Skills Analysis</label>
+                                    <label><input type="checkbox"> Experience Details</label>
+                                    <label><input type="checkbox"> Education</label>
+                                    <label><input type="checkbox"> Contact Information</label>
+                                </div>
+                            </div>
+                            <div class="builder-section">
+                                <label>Export Format</label>
+                                <div class="format-options">
+                                    <button class="format-btn active" data-format="pdf"><i class="fas fa-file-pdf"></i> PDF</button>
+                                    <button class="format-btn" data-format="excel"><i class="fas fa-file-excel"></i> Excel</button>
+                                    <button class="format-btn" data-format="csv"><i class="fas fa-file-csv"></i> CSV</button>
+                                    <button class="format-btn" data-format="json"><i class="fas fa-code"></i> JSON</button>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-full" id="generateCustomReport">
+                                <i class="fas fa-magic"></i> Generate Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Report History -->
+                    <div class="reports-card glass-card full-width">
+                        <h3><i class="fas fa-history"></i> Report History</h3>
+                        <div class="report-history">
+                            <table class="history-table">
+                                <thead>
+                                    <tr>
+                                        <th>Report Name</th>
+                                        <th>Type</th>
+                                        <th>Generated</th>
+                                        <th>Candidates</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reportHistoryBody">
+                                    <tr>
+                                        <td colspan="5" class="empty-cell">
+                                            <i class="fas fa-folder-open"></i>
+                                            <p>No reports generated yet</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Scheduled Reports -->
+                    <div class="reports-card glass-card">
+                        <h3><i class="fas fa-calendar-alt"></i> Scheduled Reports</h3>
+                        <div class="scheduled-reports">
+                            <div class="schedule-item">
+                                <div class="schedule-info">
+                                    <i class="fas fa-file-pdf"></i>
+                                    <div>
+                                        <strong>Weekly Summary</strong>
+                                        <span>Every Monday, 9:00 AM</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="schedule-item">
+                                <div class="schedule-info">
+                                    <i class="fas fa-file-excel"></i>
+                                    <div>
+                                        <strong>Monthly Analytics</strong>
+                                        <span>1st of each month</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <button class="btn btn-outline btn-full" id="addScheduleBtn">
+                                <i class="fas fa-plus"></i> Add Schedule
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Candidate Modal -->
+        <div class="modal-overlay" id="candidateModal">
+            <div class="modal-container glass-card">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <i class="fas fa-user-circle"></i>
+                        <h2>Candidate Profile</h2>
+                    </div>
+                    <button class="modal-close" id="closeModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalBody"></div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="rejectCandidate">
+                        <i class="fas fa-times-circle"></i> Reject
+                    </button>
+                    <button class="btn btn-warning" id="shortlistCandidate">
+                        <i class="fas fa-bookmark"></i> Shortlist
+                    </button>
+                    <button class="btn btn-primary" id="scheduleInterview">
+                        <i class="fas fa-calendar-check"></i> Schedule Interview
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Modal -->
+        <div class="modal-overlay" id="exportModal">
+            <div class="modal-container glass-card export-modal">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <i class="fas fa-file-export"></i>
+                        <h2>Export Results</h2>
+                    </div>
+                    <button class="modal-close" id="closeExportModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="export-options">
+                        <div class="export-option" data-format="json">
+                            <i class="fas fa-file-code"></i>
+                            <h4>JSON</h4>
+                            <p>Full data export</p>
+                        </div>
+                        <div class="export-option" data-format="csv">
+                            <i class="fas fa-file-csv"></i>
+                            <h4>CSV</h4>
+                            <p>Spreadsheet compatible</p>
+                        </div>
+                        <div class="export-option" data-format="pdf">
+                            <i class="fas fa-file-pdf"></i>
+                            <h4>PDF Report</h4>
+                            <p>Executive summary</p>
+                        </div>
+                        <div class="export-option" data-format="excel">
+                            <i class="fas fa-file-excel"></i>
+                            <h4>Excel</h4>
+                            <p>Advanced analysis</p>
+                        </div>
+                    </div>
+                    <div class="export-filters">
+                        <h4>Include Candidates</h4>
+                        <label><input type="checkbox" checked> Strong Matches</label>
+                        <label><input type="checkbox" checked> Good Matches</label>
+                        <label><input type="checkbox"> Needs Review</label>
+                        <label><input type="checkbox"> Not Recommended</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="cancelExport">Cancel</button>
+                    <button class="btn btn-primary" id="confirmExport">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auth Modal -->
+        <div class="modal-overlay" id="authModal">
+            <div class="modal-content auth-modal">
+                <button class="modal-close" id="closeAuthModal">&times;</button>
+                
+                <!-- Sign In Form -->
+                <div class="auth-form" id="signInForm">
+                    <div class="auth-header">
+                        <div class="auth-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h2>Welcome Back</h2>
+                        <p>Sign in to continue to ResumeAI Pro</p>
+                    </div>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label><i class="fas fa-envelope"></i> Email</label>
+                            <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-lock"></i> Password</label>
+                            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                        </div>
+                        <div class="form-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="rememberMe">
+                                <span>Remember me</span>
+                            </label>
+                            <a href="#" class="forgot-link">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </button>
+                    </form>
+                    <div class="auth-divider">
+                        <span>or continue with</span>
+                    </div>
+                    <div class="social-login">
+                        <button class="social-btn google"><i class="fab fa-google"></i></button>
+                        <button class="social-btn github"><i class="fab fa-github"></i></button>
+                        <button class="social-btn linkedin"><i class="fab fa-linkedin-in"></i></button>
+                    </div>
+                    <p class="auth-switch">Don't have an account? <a href="#" id="showSignUp">Sign up</a></p>
+                </div>
+                
+                <!-- Sign Up Form -->
+                <div class="auth-form" id="signUpForm" style="display: none;">
+                    <div class="auth-header">
+                        <div class="auth-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h2>Create Account</h2>
+                        <p>Start your AI-powered hiring journey</p>
+                    </div>
+                    <form id="registerForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label><i class="fas fa-user"></i> First Name</label>
+                                <input type="text" id="firstName" placeholder="First name" required>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-user"></i> Last Name</label>
+                                <input type="text" id="lastName" placeholder="Last name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-envelope"></i> Email</label>
+                            <input type="email" id="registerEmail" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-building"></i> Company</label>
+                            <input type="text" id="company" placeholder="Your company name">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-lock"></i> Password</label>
+                            <input type="password" id="registerPassword" placeholder="Create a password" required>
+                            <div class="password-strength" id="passwordStrength"></div>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-lock"></i> Confirm Password</label>
+                            <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+                        </div>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="agreeTerms" required>
+                            <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
+                        </label>
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </button>
+                    </form>
+                    <div class="auth-divider">
+                        <span>or continue with</span>
+                    </div>
+                    <div class="social-login">
+                        <button class="social-btn google"><i class="fab fa-google"></i></button>
+                        <button class="social-btn github"><i class="fab fa-github"></i></button>
+                        <button class="social-btn linkedin"><i class="fab fa-linkedin-in"></i></button>
+                    </div>
+                    <p class="auth-switch">Already have an account? <a href="#" id="showSignIn">Sign in</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Container -->
+        <div class="toast-container" id="toastContainer"></div>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-robot"></i>
+                    <span>ResumeAI Pro</span>
+                </div>
+                <div class="footer-links">
+                    <a href="#">Documentation</a>
+                    <a href="#">API</a>
+                    <a href="#">Support</a>
+                    <a href="#">Privacy</a>
+                </div>
+                <div class="footer-copy">
+                    © 2026 ResumeAI Pro. Powered by Langflow AI
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- SVG Defs -->
+    <svg style="position: absolute; width: 0; height: 0;">
+        <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#6366f1" />
+                <stop offset="100%" style="stop-color:#22d3ee" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+    <script>
+        // Load user info on dashboard
+        (async function loadUserInfo() {
+            try {
+                const response = await fetch('/api/auth/user');
+                const data = await response.json();
+                
+                if (data.success && data.user) {
+                    const user = data.user;
+                    const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                    const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=6366f1&color=fff`;
+                    
+                    document.getElementById('userName').textContent = user.name;
+                    document.getElementById('userEmail').textContent = user.email;
+                    document.getElementById('avatarImg').src = avatarUrl;
+                    document.getElementById('dropdownAvatarImg').src = avatarUrl;
+                }
+            } catch (error) {
+                console.error('Failed to load user info:', error);
+            }
+        })();
+        
+        // User dropdown toggle
+        document.getElementById('userAvatar').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.getElementById('userDropdown').classList.toggle('show');
+        });
+        
+        document.addEventListener('click', function() {
+            document.getElementById('userDropdown').classList.remove('show');
+        });
+    </script>
+</body>
+</html>
