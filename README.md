@@ -32,7 +32,5 @@ It supports local execution, Docker deployment, and demo data generation for tes
 - **Concurrency:** Python threading
 - **Containerization:** Docker (optional)
 
----
 
-## 🏗 Architecture Overview
 
